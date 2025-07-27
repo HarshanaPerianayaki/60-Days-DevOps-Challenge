@@ -1,0 +1,742 @@
+Day 3:
+
+Git & GitHub - Basics, Branching, Merging, PRs
+
+Learning points:
+What is Version Control? – Why Git is the most popular VCS.
+Git vs. Other VCS – Differences from SVN, Mercurial.
+Repositories, Commits, and Branches – How Git tracks changes.
+Git States – Working directory, staging area, and commit history.
+Basic Git Commands – init, add, commit, status, log, diff.
+Branching & Merging – Creating branches and merging changes.
+Pull Requests (PRs) – Understanding GitHub workflows.
+Remote Repositories – Connecting local Git with GitHub (git remote add origin).
+Collaboration – Cloning, fetching, pulling, and pushing changes.
+Resolving Merge Conflicts – How to handle and fix conflicts.
+
+What is Version Control?
+     Version Control System (VCS) is a tool that helps track changes in code over time, collaborate with team members, and manage code history.
+
+     Enables rollbacks to previous versions.
+     Tracks who made what changes and when.
+     Facilitates parallel development via branching.
+
+Why Git is the Most Popular VCS
+  Distributed System – Every developer has a full copy of the repo.
+  Lightning Fast – Operations like commit, diff, and branch are local.
+  Flexible Branching – Create, merge, or delete branches easily.
+  Open-source and supported by platforms like GitHub, GitLab, Bitbucket.
+ 
+📁 Git Concepts: Repositories, Commits, Branches
+  Repository (Repo) – A project tracked by Git.
+  Commit – A snapshot of code changes.
+  Branch – A parallel line of development.
+
+# Create a Git repo
+git init
+
+# Check repo status
+git status
+
+📂 Git States: How Git Tracks Code
+  Working Directory – Your local files.
+  Staging Area – Changes marked for commit.
+  Commit History – Confirmed snapshots.
+
+# Stage changes
+git add .
+
+# Commit staged changes
+git commit -m "Initial commit"
+
+Basic Git Commands:
+git init                # Initialize a repo
+git add <file>          # Stage files
+git commit -m "msg"     # Commit staged files
+git status              # Show current state
+git log                 # View commit history
+git diff                # Show unstaged changes
+Branching & Merging
+git branch <branch>     # Create a new branch
+git checkout <branch>   # Switch to the branch
+git merge <branch>      # Merge branch into current branch
+Branches are isolated workspaces—ideal for features or fixes. Merging integrates changes back.
+
+Pull Requests (PRs) & GitHub Workflows
+   A Pull Request (PR) is a request to merge one branch into another—typically reviewed by teammates.
+
+GitHub workflow:
+
+Fork repo (if needed)
+Create a branch
+Push code
+Create PR
+Review → Merge
+
+Remote Repositories
+Connect your local repo to GitHub:
+  git remote add origin https://github.com/user/repo.git
+  git push -u origin main
+
+Git Collaboration Basics
+git clone <repo_url>    # Clone remote repo
+git fetch               # Fetch remote changes
+git pull                # Fetch + merge remote changes
+git push                # Push local commits
+
+Initial Tasks:
+✅ Install Git on your system: Git Installation
+
+✅ Configure your Git username and email:
+
+git config --global user.name "Your Name" 
+git config --global user.email "your@email.com"
+
+✅ Create a new folder and initialize a Git repository:
+
+mkdir git-project && cd git-project git init
+
+touch index.html style.css 
+git add . git commit -m "Initial commit"
+
+✅ Modify index.html, check changes, and make another commit:
+
+git status 
+git diff 
+git add index.html 
+git commit -m "Updated index.html"
+
+✅ Check commit history using:
+
+git log --oneline
+
+
+✅ Create a GitHub Repository, add a remote, and push:
+
+git remote add origin https://github.com/yourusername/git-project.git 
+git branch -M main git push -u origin main
+
+✅ Challenge 1: Fork and clone an open-source project (Sample Project Link)
+Answer:
+
+Step 1: Fork the Repository
+Go to the repository link:
+👉 EKS Auto Mode Workshop
+Click the "Fork" button (top right) to create a copy under your GitHub account
+Step 2: Clone the Forked Repository
+Once you've forked the repository, run:
+
+(Replace YOUR_GITHUB_USERNAME with your actual GitHub username.)
+
+git clone https://github.com/YOUR_GITHUB_USERNAME/eks-auto-mode-workshop.git 
+#e.g. git clone https://github.com/sd031/eks-auto-mode-workshop.git
+Bonus 💡 : If you want to sync future updates from the original repository, navigate into the Project Directory & Set the Upstream Repository, and run:
+cd eks-auto-mode-workshop 
+git remote add upstream https://github.com/sd031/eks-auto-mode-workshop.git
+Verify via running:
+
+🔁 Check Git Remotes (git remote -v)
+git remote -v
+Example Output:
+
+origin  https://github.com/YOUR_GITHUB_USERNAME/eks-auto-mode-workshop.git (fetch)
+origin  https://github.com/YOUR_GITHUB_USERNAME/eks-auto-mode-workshop.git (push)
+upstream  https://github.com/sd031/eks-auto-mode-workshop.git (fetch)
+upstream  https://github.com/sd031/eks-auto-mode-workshop.git (push)
+To fetch and merge updates from the original repo:
+
+git fetch upstream 
+git merge upstream/main
+
+
+✅ Challenge 2: Create a new branch (feature-branch), switch, and commit changes.
+
+Answer:
+
+Step 1: Create a New Branch and Switch to It:
+checkout -b → Creates and switches to feature-branch.
+
+git checkout -b feature-branch
+
+Step 2: Verify the Active Branch
+(The * indicates the current branch.)
+
+git branch # it will out out put like below main * feature-branch
+
+Step 3: Make Some Changes
+Edit a file or create a new one:
+
+echo "New feature added!" > feature.txt
+
+Step 4: Stage the Changes
+git add feature.txt
+
+Step 5: Commit the Changes
+git commit -m "Added feature.txt with new feature"
+
+Step 6: Push the New Branch to GitHub
+git push origin feature-branch
+
+
+✅ Challenge 3: Merge feature-branch into main and push the changes.
+
+Step 1: Switch to the main Branch
+git checkout main
+
+Step 2: Ensure Your main Branch is Up-to-Date
+git pull origin main
+
+This fetches and merges the latest changes from the remote repository.
+
+Step 3: Merge feature-branch into main
+git merge feature-branch
+
+If there are no conflicts, you’ll see:
+
+Updating 1a2b3c4..4d5e6f7 Fast-forward  feature.txt | 1 +  1 file changed, 1 insertion(+)
+
+If there are conflicts, Git will notify you, and you’ll need to manually resolve them.
+
+Step 4: Push the Merged Changes to GitHub
+git push origin main
+
+Step 5: Delete feature-branch
+After merging, you can delete the feature branch:
+
+🗑️ Delete a Git Branch Locally and Remotely
+# Delete a local branch
+git branch -d feature-branch
+
+# Delete a remote branch
+git push origin --delete feature-branch
+Example Output:
+
+Switched to branch 'main'
+Your branch is up to date with 'origin/main'.
+
+Merge made by the 'fast-forward' strategy.
+ feature.txt | 1 +
+ 1 file changed, 1 insertion(+)
+
+Deleted branch feature-branch (was 4d5e6f7).
+
+
+✅ Challenge 4: Use git reset or git revert to undo a commit.
+
+Answer :
+
+Using git reset:
+Completely Remove the Last Commit
+
+git reset --hard HEAD~1
+
+Explanation:
+
+--hard → Removes the commit and discards changes.
+
+If you want to undo the commit but keep the changes:
+
+git reset --soft HEAD~1
+
+Using git revert to Undo a Specific Commit Without Changing History
+git revert <commit-hash>
+
+Example:
+
+git log --oneline to find the commit hash and then revert to the old commit
+
+🕘 View Commit History & Revert a Commit
+# Show concise commit history
+git log --oneline
+Example Output:
+
+d3f3c12 Added a new feature
+b2a1f98 Fixed a bug
+# Revert a specific commit by hash
+git revert d3f3c12
+Bonus 💡 If you've already pushed the commit to GitHub and need to force-push:
+
+git push origin main --force # Use with caution!
+
+
+✅ Challenge 5: Rebase feature-branch onto main and understand the difference.
+
+Answer:
+
+First what is exactly a Git Rebase:
+
+git rebase is a command that moves or combines commits from one branch onto another, rewriting commit history in a linear way.
+
+Example:
+
+🔄 Git Rebase Visualization (Before & After)
+
+📍 Before Rebase (git log --oneline --graph)
+* commit C (feature-branch)
+* commit B (feature-branch)
+| * commit M2 (main)
+| * commit M1 (main)
+|/
+* commit A (common ancestor)
+✅ After Rebase (git log --oneline --graph)
+* commit C' (feature-branch, rebased)
+* commit B' (feature-branch, rebased)
+* commit M2 (main)
+* commit M1 (main)
+* commit A (common ancestor)
+🔧 commit B and commit C are now reapplied on top of main, creating new commit hashes B' and C'.
+Now, to rebase feature-branch onto main using the following steps:
+
+Step 1: Switch to feature-branch
+
+git checkout feature-branch
+
+Step 2: Rebase feature-branch onto main
+
+git rebase main
+
+Explanation:
+
+This moves feature-branch to start from the latest main commit.
+It applies feature-branch commits on top of main.
+Step 3: Resolve Any Merge Conflicts
+
+If conflicts occur:
+
+Git will pause and show which files have conflicts.
+Manually edit the conflicting files to resolve them.
+Mark conflicts as resolved:
+git add <resolved-file>
+Continue the rebase:
+git rebase --continue
+If you want to abort the rebase:
+git rebase --abort
+ 
+🔍 Difference: Rebase vs Merge
+Feature	Rebase (git rebase main)	Merge (git merge main)
+History	Creates a clean linear history	Keeps a branching history
+Commits	Moves commits on top of the latest main	Merges main changes with a merge commit
+Conflicts	Can require resolving multiple conflicts	Resolves conflicts once at merge
+Recommended When	You want a clean history (before merging)	You need a clear branch history
+
+
+✅ Challenge 6: Create a PR on GitHub from a feature branch.
+
+Answer:
+
+We can create a Pull Request (PR) on GitHub from a feature-branch using the following steps:
+
+Step 1: Push the Feature Branch to GitHub
+
+If your feature branch isn't pushed yet, run:
+
+git push origin feature-branch
+
+Step 2: Open GitHub and Navigate to the Repository
+
+Go to your GitHub repository.
+Click on the "Compare & pull request" button (it appears after pushing the branch).
+Step 3: Fill in PR Details
+
+Ensure the correct base and compare branches:
+Base branch: main
+Compare branch: feature-branch
+Add a Title & Description (e.g., "Added new feature for user authentication").
+Optional: Assign reviewers, add labels, or link issues.
+Step 4: Create the PR
+
+Click "Create Pull Request".
+Your PR is now open for review.
+Step 5: Merge the PR (After Approval)
+
+Once approved, merge the PR:
+
+Click "Merge pull request".
+Select "Squash and merge" (optional for a clean history).
+Delete the feature branch if no longer needed.
+Bonus 💡 : Create a PR Using GitHub CLI (Optional)
+
+gh pr create --base main --head feature-branch --title "New Feature" --body "Description of the feature"
+
+(Requires GitHub CLI: gh auth login before using this command)
+
+
+✅ Challenge 7: Create conflicting changes in different branches and resolve them.
+Step 1: Create a Repository (or Use an Existing One)
+
+If you don’t have a repository, create one:
+
+🆕 Initialize a Git Repository and Make First Commit
+# Create and enter a new project directory
+git init conflict-demo
+cd conflict-demo
+
+# Create a file and add content
+echo "Hello, DevOps!" > file.txt
+
+# Stage the file
+git add file.txt
+
+# Commit the file
+git commit -m "Initial commit"
+Step 2: Create and Modify feature-branch
+
+# Create and switch to a new branch
+git checkout -b feature-branch
+
+# Modify the file
+echo "Feature branch change" > file.txt
+
+# Stage the changes
+git add file.txt
+
+# Commit the changes
+git commit -m "Modified file.txt in feature-branch"
+Step 3: Switch to main and Make a Conflicting Change
+
+🔄 Update main Branch and Commit Changes
+# Switch to the main branch
+git checkout main
+
+# Modify the file
+echo "Main branch change" > file.txt
+
+# Stage the change
+git add file.txt
+
+# Commit the change
+git commit -m "Modified file.txt in main"
+Now, file.txt has different content in main and feature-branch, causing a merge conflict.
+
+Step 4: Merge feature-branch into main
+
+git merge feature-branch
+
+You’ll see a conflicting message like:
+
+⚠️ Merge Conflict Example
+After attempting to merge:
+
+Auto-merging file.txt
+CONFLICT (content): Merge conflict in file.txt
+Automatic merge failed; fix conflicts and then commit the result.
+Step 5: Resolve the Conflict
+
+Open file.txt, which will look like this:
+
+<<<<<<< HEAD
+Main branch change
+=======
+Feature branch change
+>>>>>>> feature-branch
+
+
+
+
+Manually edit the file to keep the correct content.
+Mark the conflict as resolved:
+
+
+git add file.txt git commit -m "Resolved merge conflict in file.txt"
+
+Step 6: Push the Merged Changes
+
+git push origin main
+
+
+✅ Challenge 8: git stash to save and restore uncommitted changes.
+
+Answer:
+
+First, what is git stash ?
+
+git stash to temporarily save and restore uncommitted changes
+
+Now, to answer the usage here is with an example:
+
+Step 1: Make Some Changes to a File
+
+echo "Uncommitted changes" >> file.txt
+
+Check the status using git status command:
+
+git status #Output: Changes not staged for commit: modified:   file.txt
+
+Step 2: Stash Uncommitted Changes
+
+git stash
+
+This saves the changes and reverts your working directory to the last committed state.
+
+Check the status again using git status the command:
+
+git status
+
+Nothing to commit, working tree clean.
+
+Step 3: Restore the Stashed Changes
+
+To restore the last stashed changes:
+
+git stash pop
+
+OR if you want to apply the changes but keep them in stash:
+
+git stash apply
+
+Step 4: List All Stashes
+
+If you have multiple stashes:
+
+📦 View Git Stashes (git stash list)
+git stash list
+Example Output:
+
+stash@{0}: WIP on feature-branch: 123abc Modified file.txt
+stash@{1}: WIP on main: 456def Added a new feature
+💡 Use git stash apply stash@{0} or git stash pop stash@{0} to reapply or remove and apply a stash.
+Step 5: Restore a Specific Stash
+
+If you want to apply a specific stash:
+
+git stash apply stash@{1}
+
+Step 6: Delete a Stash
+
+After restoring, if you no longer need the stash:
+
+git stash drop stash@{0}
+
+To clear all stashes:
+
+git stash clear
+
+
+✅ Challenge 9: Add version tags to commits and push them.
+
+Answer:
+
+Let’s first understand what is Git Version Tags :
+
+Git version tags are pointers to specific commits, commonly used for marking release versions (e.g., v1.0.0). Tags help in tracking stable versions of the codebase and are immutable references. They come in two types: lightweight (a simple reference) and annotated (with metadata like message, author, and timestamp).
+
+here’s how you work with it:
+
+Step 1: Check the Latest Commit
+
+To verify which commit you’re tagging:
+
+🧾 Visualize Git History with Graph and Decorations
+git log --oneline --graph --decorate -n 5
+Example Output:
+
+* a1b2c3d (HEAD -> main) Added feature X
+* e4f5g6h Fixed bug Y
+* i7j8k9l Initial commit
+🧠 --graph shows the branch structure
+🏷️ --decorate shows branch pointers like HEAD or main
+🔢 -n 5 limits the output to the latest 5 commits
+Step 2: Create a Tag
+
+Lightweight Tag (Basic, No Message)git tag v1.0.0
+Annotated Tag (With Message)
+git tag -a v1.0.0 -m "Release version 1.0.0"
+Step 3: List Tags
+
+git tag #output v1.0.0 #To view details of an annotated tag: git show v1.0.0
+
+Step 4: Push the Tag to GitHub
+
+git push origin v1.0.0
+
+To push all tags:
+
+git push --tags
+
+Step 5: Delete a Tag (If Needed)
+
+Delete a Local Tag
+
+git tag -d v1.0.0
+
+
+Delete a Remote Tag
+git push origin --delete v1.0.0
+
+
+
+Bonus 💡 : Checkout a Specific Tag
+
+To create a branch from a tag:
+
+git checkout -b release-1.0 v1.0.0
+
+
+✅ Challenge 10: Use git commit --amend and git rebase -i to edit past commits.
+
+Answer:
+
+Step 1: Modify a Tracked File
+
+echo "New change" >> file.txt git add file.txt
+
+Step 2: Amend the Last Commit
+
+git commit --amend -m "Updated commit with new changes"
+
+✅ This modifies the last commit instead of creating a new one.
+
+Step 3: Push the Amended Commit (If Already Pushed)
+
+If you already pushed the commit, force push is required:
+
+git push origin main --force
+
+🚨 Use with caution, as it rewrites history!
+
+Option 2: Edit Older Commits (git rebase -i)
+
+If you need to modify a commit that is not the last one, use interactive rebase.
+
+Step 1: List Recent Commits
+
+git log --oneline -n 5
+
+Example output:
+
+🌿 Git Commit Log with Feature Branch
+git log --oneline --graph --decorate -n 5
+Example Output:
+
+* a1b2c3d (HEAD -> feature-branch) Added new feature
+* e4f5g6h Fixed API issue
+* i7j8k9l Updated documentation
+* m0n1o2p Initial commit
+🧭 HEAD -> feature-branch shows the current branch pointer
+💡 Useful for reviewing recent history and branch context
+Step 2: Start an Interactive Rebase
+
+To modify the last 3 commits:
+
+git rebase -i HEAD~3
+
+Step 3: Modify Commits:
+
+The editor will show
+
+✍️ Git Interactive Rebase Example
+pick a1b2c3d Added new feature
+pick e4f5g6h Fixed API issue
+pick i7j8k9l Updated documentation
+You can change pick to:
+
+reword – change the commit message
+edit – amend the commit
+squash – combine commits
+drop – remove a commit
+📌 After editing, save and close the file to continue rebase.
+
+Change pick to:
+
+🛠️ Git Interactive Rebase with reword and edit
+reword a1b2c3d Added new feature
+edit   e4f5g6h Fixed API issue
+pick   i7j8k9l Updated documentation
+What it does:
+
+reword: lets you change the commit message for a1b2c3d
+edit: pauses the rebase after e4f5g6h so you can change the content or amend the commit
+pick: keeps the commit i7j8k9l as-is
+✅ After editing:
+# For reword: Git will prompt for a new message
+# For edit:
+# Make your changes, then run:
+git add .
+git commit --amend
+git rebase --continue
+Save and close the editor.
+
+Step 4: Edit the Selected Commits
+
+For reword, Git will prompt you to edit the commit message.
+
+For edit, Git will pause the rebase:
+
+Modify the commit (if needed) :
+echo "Extra fix" >> file.txt
+git add file.txtgit commit --amend
+Continue the rebase:
+git rebase --continue
+Step 5: Push the Edited Commits
+
+If you already pushed the commits, force push is required:
+
+git push origin feature-branch --force
+
+Bonus Read 💡 : What’s inside the .git folder?
+
+📂 .git/
+├── 📁 branches/ # Legacy, usually empty in modern Git
+├── 📁 hooks/ # Client-side hooks for automating tasks (pre-commit, post-merge etc.)
+├── 📁 info/ # Contains exclude file for local ignores
+│ └── 📄 exclude # Like .gitignore but not committed
+├── 📁 logs/ # Records history of ref updates
+│ ├── 📁 refs/
+│ │ ├── 📁 heads/
+│ │ │ └── 📄 main # Log of changes to main branch
+│ │ └── 📁 remotes/
+│ │ └── 📁 origin/
+│ │ └── 📄 main # Log of changes to remote tracking branch
+│ └── 📄 HEAD # Log of changes to HEAD
+├── 📁 objects/ # Stores all Git objects (commits, trees, blobs)
+│ ├── 📁 info/
+│ └── 📁 pack/ # Stores packed objects for efficiency
+├── 📁 refs/ # Pointers to commit objects
+│ ├── 📁 heads/
+│ │ └── 📄 main # Pointer to latest commit on main
+│ ├── 📁 remotes/
+│ │ └── 📁 origin/
+│ │ └── 📄 main # Tracks remote origin/main
+│ └── 📁 tags/ # Tag references
+├── 📄 config # Project-specific Git configuration
+├── 📄 description # Description of the repo (used by GitWeb)
+├── 📄 HEAD # Points to the current branch ref
+├── 📄 index # Staging area (cached file snapshot)
+├── 📄 COMMIT_EDITMSG # Stores commit message during commit
+├── 📄 FETCH_HEAD # Records the branch fetched from a remote
+├── 📄 ORIG_HEAD # Points to previous HEAD (useful after rebase, merge, etc.)
+└── 📄 MERGE_HEAD # Present during a merge; points to the commit being merged
+
+This .git folder is what makes a directory a Git repository. If deleted, you lose version control. 🚀
+
+Explanation of Each File and Folder:
+branches/ (📂)
+This was historically used to store branch references but is now obsolete.
+hooks/ (📂)
+Contains shell scripts that automate actions (e.g., pre-commit, post-commit, pre-push).
+Default ones are .sample files to guide users.
+info/ (📂)
+Contains an exclude file for repository-specific ignored files (like .gitignore but local).
+logs/ (📂)
+Tracks movements of HEAD and branches.
+Helps in recovering lost commits (git reflog).
+objects/ (📂)
+Stores actual data as blobs (file contents), trees (directories), commits, and tags.
+Uses SHA-1 hashed directories for efficient storage.
+pack/ stores compressed data to optimize space.
+refs/ (📂)
+Stores branch (heads/), remote (remotes/), and tag (tags/) references.
+These files contain commit hashes pointing to the latest commit.
+COMMIT_EDITMSG (📄)
+Stores the last commit message (useful when reusing the commit message).
+config (📄)
+Stores repository-level configurations like remotes, user info, etc.
+description (📄)
+Used by GitWeb (a web-based Git viewer), but not required for regular use.
+HEAD (📄)
+Points to the latest commit of the currently checked-out branch.
+Example: ref: refs/heads/main (means currently on main branch).
+index (📄)
+Stores the staging area (aka "index"), tracking what’s staged for commit.
+packed-refs (📄)
+If Git optimizes refs, this file consolidates them instead of storing them in separate files.
