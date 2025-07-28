@@ -1,0 +1,164 @@
+Day 4
+
+ Git Advanced Mastery!
+
+Learning points:
+🔹 Git Rebase – Deep Dive
+🔹 Git Cherry-pick – Applying specific commits from one branch to another.
+🔹 Resolving Merge Conflicts – Identifying and resolving conflicts efficiently.
+🔹 Rewriting History – advanced use cases
+🔹 Amending Commits – How to modify the last commit without changing history and real-life use cases.
+🔹 Git Hooks – Automating tasks with pre-commit and post-commit hooks.
+
+Initial Tasks:
+✅ Task 1: Set up a Git repository or use an existing one for practicing advanced Git commands.
+✅ Task 2: Create a new branch (git checkout -b advanced-git-practice) and make multiple commits.
+✅ Task 3: Push your branch to a remote repository (git push origin advanced-git-practice).
+✅ Task 4: Simulate a collaborative workflow: Create a second branch (feature-x), make commits, and merge it into the main branch.
+✅ Task 5: Create an intentional merge conflict between two branches and attempt to resolve it.
+✅ Task 6: Use git log --oneline --graph --all to visualize the commit history and branch structure.
+
+✅ Challenge 1: Perform an interactive rebase to modify commit history
+We can use interactive rebase (git rebase -i) to rename, squash, and reorder commits in your Git history.
+
+Step 1: View Recent Commits
+git log --oneline -n 5
+Example output:
+
+a1b2c3d (HEAD -> feature-branch) Added new feature
+e4f5g6h Fixed API issue
+i7j8k9l Updated documentation
+m0n1o2p Initial commit
+Step 2: Start an Interactive Rebase
+git rebase -i HEAD~3
+This opens an editor:
+
+pick a1b2c3d Added new feature
+pick e4f5g6h Fixed API issue
+pick i7j8k9l Updated documentation
+Step 3: Modify Commits
+
+1⃣ Rename a Commit Message
+Change pick to reword:
+
+reword a1b2c3d Added new feature
+pick e4f5g6h Fixed API issue
+pick i7j8k9l Updated documentation
+
+2⃣ Squash Commits
+pick a1b2c3d Added new feature
+pick e4f5g6h Fixed API issue
+squash i7j8k9l Updated documentation
+
+3⃣ Reorder Commits
+pick e4f5g6h Fixed API issue
+pick i7j8k9l Updated documentation
+pick a1b2c3d Added new feature
+
+Step 4: Continue and Push Changes
+git rebase --continue
+git push origin feature-branch --force
+
+
+✅ Challenge 2: Use git cherry-pick
+Step 1: View Commits
+git checkout feature-branch
+git log --oneline --graph -n 5
+
+Step 2: Switch to Target Branch
+git checkout main
+
+Step 3: Apply Specific Commit
+git cherry-pick e4f5g6h
+
+Step 4: Resolve Conflicts (if any)
+git add <resolved-file>
+git cherry-pick --continue
+# To abort:
+git cherry-pick --abort
+
+Step 5: Push Changes
+git push origin main
+
+
+✅ Challenge 3: Merge Conflict Scenario
+Step 1: Setup Repository
+git init merge-conflict-demo
+cd merge-conflict-demo
+echo "Line 1" > conflict.txt
+git add conflict.txt
+git commit -m "Initial commit"
+
+Step 2: Feature Branch
+git checkout -b feature-branch
+echo "Feature branch change" > conflict.txt
+git commit -am "Modified conflict.txt in feature-branch"
+
+Step 3: Main Branch Change
+git checkout main
+echo "Main branch change" > conflict.txt
+git commit -am "Modified conflict.txt in main"
+
+Step 4: Merge and Resolve
+git merge feature-branch
+# Resolve conflict manually in conflict.txt
+# Then:
+git add conflict.txt
+git commit -m "Resolved merge conflict"
+
+Step 5: Rebase Method
+git checkout main
+git reset --hard HEAD~1
+git rebase feature-branch
+# Resolve and continue:
+git add conflict.txt
+git rebase --continue
+
+Step 6: Push Changes
+git push origin main --force
+
+
+✅ Challenge 4: Undo Commit with reset and revert
+Step 1: Sample Commits
+git init undo-demo
+cd undo-demo
+echo "First commit" > file.txt
+git add file.txt
+git commit -m "First commit"
+echo "Second commit" >> file.txt
+git commit -am "Second commit"
+echo "Third commit" >> file.txt
+git commit -am "Third commit"
+git log --oneline -n 3
+
+Option 1: Using reset
+1⃣ Soft Reset
+git reset --soft HEAD~1
+2⃣ Mixed Reset
+git reset --mixed HEAD~1
+3⃣ Hard Reset
+git reset --hard HEAD~1
+
+Option 2: Using revert
+git revert HEAD
+
+Step 3: Push Changes
+git push origin main --force  # For reset
+# or
+git push origin main          # For revert
+
+
+✅ Challenge 5: Amend Last Commit
+Step 1: Check Last Commit
+git log --oneline -n 1
+
+Step 2: Amend Commit Message
+git commit --amend -m "Updated commit message"
+
+Step 3: Add Forgotten File
+echo "New content" > forgotten.txt
+git add forgotten.txt
+git commit --amend --no-edit
+
+Step 4: Push Changes
+git push origin main --force
