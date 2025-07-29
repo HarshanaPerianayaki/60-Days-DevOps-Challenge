@@ -1,0 +1,229 @@
+Day 5 
+
+Python Basics for DevOps
+
+Learning points:
+🔹 Python Fundamentals – Variables, data types, operators, and control flow.
+🔹 Functions & Modules – Writing reusable functions and using built-in modules.
+🔹 File Handling – Reading and writing files (open(), read(), write()).
+🔹 Error Handling – Using try-except blocks to handle exceptions.
+🔹 Working with Lists, Tuples, and Dictionaries – Data manipulation techniques.
+🔹 Installing Packages with pip – Managing external libraries.
+🔹 Basic Scripting for Automation – Writing and executing Python scripts.
+
+Initial Tasks:
+✅ Task 1: Install Python (Check with python --version) and set up a virtual environment (venv).
+✅ Task 2: Install VS Code or PyCharm for a better coding experience.
+✅ Task 3: Write a simple Python script that prints "Hello, DevOps!".
+✅ Task 4: Explore built-in data types (int, float, str, list, tuple, dict) and perform basic operations.
+✅ Task 5: Write a Python function that takes two numbers as input and returns their sum.
+✅ Task 6: Use Python’s os and sys modules to interact with the system.
+
+🌟 Challenge 1: Greeting Script
+# greet.py
+name = input("Enter your name: ")
+print(f"Hello, {name}! Welcome to the DevOps world! 🚀")
+
+Run:
+ python greet.py
+
+
+🌟 Challenge 2: Word Count in File
+# word_count.py
+file_name = input("Enter the file name: ")
+try:
+    with open(file_name, "r") as file:
+        content = file.read()
+    word_count = len(content.split())
+    print(f"✅ The file '{file_name}' contains {word_count} words.")
+except FileNotFoundError:
+    print(f"❌ Error: The file '{file_name}' was not found.")
+except Exception as e:
+    print(f"❌ An error occurred: {e}")
+
+Run:
+   echo "DevOps is about automation, collaboration, and efficiency." > sample.txt
+   python word_count.py
+
+Bonus:
+
+file_name = input("Enter the file name: ")
+try:
+    word_count = 0
+    with open(file_name, "r") as file:
+        for line in file:
+            word_count += len(line.split())
+    print(f"✅ The file '{file_name}' contains {word_count} words.")
+except FileNotFoundError:
+    print(f"❌ Error: The file '{file_name}' was not found.")
+except Exception as e:
+    print(f"❌ An error occurred: {e}")
+
+
+🌟 Challenge 3: Random Password Generator
+# generate_password.py
+import secrets
+import string
+
+def generate_password(length=12):
+    characters = string.ascii_letters + string.digits + string.punctuation
+    password = ''.join(secrets.choice(characters) for _ in range(length))
+    return password
+
+print(f"🔐 Your secure password: {generate_password()}")
+
+Bonus:
+
+def generate_password(length):
+    if length < 8:
+        print("❌ Password length should be at least 8 characters for security.")
+        return None
+    characters = string.ascii_letters + string.digits + string.punctuation
+    return ''.join(secrets.choice(characters) for _ in range(length))
+
+length = int(input("Enter password length (min 8): "))
+password = generate_password(length)
+if password:
+    print(f"🔐 Your secure password: {password}")
+
+
+🌟 Challenge 4: Prime Number Checker
+# check_prime.py
+def is_prime(n):
+    if n < 2:
+        return False
+    for i in range(2, int(n**0.5) + 1):
+        if n % i == 0:
+            return False
+    return True
+
+try:
+    num = int(input("Enter a number: "))
+    if is_prime(num):
+        print(f"✅ {num} is a prime number.")
+    else:
+        print(f"❌ {num} is not a prime number.")
+except ValueError:
+    print("❌ Please enter a valid integer.")
+
+
+🌟 Challenge 5: Ping Servers from File
+# ping_servers.py
+import os
+import platform
+
+def ping_server(server):
+    param = "-n 1" if platform.system().lower() == "windows" else "-c 1"
+    response = os.system(f"ping {param} {server} > /dev/null 2>&1")
+    return response == 0
+
+try:
+    with open("servers.txt", "r") as file:
+        servers = [line.strip() for line in file.readlines()]
+    for server in servers:
+        if server:
+            status = "✅ Reachable" if ping_server(server) else "❌ Unreachable"
+            print(f"{server}: {status}")
+except FileNotFoundError:
+    print("❌ Error: servers.txt not found!")
+except Exception as e:
+    print(f"❌ An error occurred: {e}")
+
+Bonus - Log Results:
+
+with open("ping_results.log", "w") as log_file:
+    for server in servers:
+        if server:
+            status = "✅ Reachable" if ping_server(server) else "❌ Unreachable"
+            log_file.write(f"{server}: {status}\n")
+            print(f"{server}: {status}")
+
+
+🌟 Challenge 6: CRUD Operations with Requests
+# crud_call.py
+import requests
+API_URL = "https://jsonplaceholder.typicode.com/posts"
+
+# Define CRUD functions...
+# get_post, create_post, update_post, delete_post as described earlier
+
+if __name__ == "__main__":
+    get_post(1)
+    new_post_id = create_post()
+    if new_post_id:
+        update_post(new_post_id)
+        delete_post(new_post_id)
+
+
+🌟 Challenge 7: Bulk Rename Files
+# rename_files.py
+import os
+
+directory = "test_files"
+prefix = "renamed_"
+
+if not os.path.exists(directory):
+    print(f"❌ Error: Directory '{directory}' not found!")
+    exit(1)
+
+for count, filename in enumerate(os.listdir(directory), start=1):
+    old_path = os.path.join(directory, filename)
+    if os.path.isfile(old_path):
+        new_name = f"{prefix}{count}.txt"
+        new_path = os.path.join(directory, new_name)
+        os.rename(old_path, new_path)
+        print(f"✅ Renamed: {filename} → {new_name}")
+print("🎉 Renaming completed!")
+
+
+🌟 Challenge 8: Monitor CPU & Memory
+# monitor_resources.py
+import psutil
+import time
+
+def monitor_resources(interval=5):
+    print("📊 Monitoring CPU and Memory usage... (Press Ctrl+C to stop)\n")
+    try:
+        while True:
+            cpu_usage = psutil.cpu_percent(interval=1)
+            memory_info = psutil.virtual_memory()
+            memory_usage = memory_info.percent
+            print(f"🖥️ CPU Usage: {cpu_usage}% | 🧠 Memory Usage: {memory_usage}%")
+            time.sleep(interval - 1)
+    except KeyboardInterrupt:
+        print("\n❌ Monitoring stopped.")
+
+Bonus - Log to File:
+
+with open("resource_usage.log", "a") as log_file:
+    while True:
+        ... # Write log entries with timestamps
+
+
+🌟 Challenge 9: Create Linux User with Subprocess
+# create_user.py
+import subprocess
+
+def create_user(username):
+    try:
+        subprocess.run(["id", username], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        print(f"✅ User '{username}' already exists.")
+        return
+    except subprocess.CalledProcessError:
+        pass
+
+    try:
+        subprocess.run(["sudo", "useradd", "-m", "-s", "/bin/bash", username], check=True)
+        print(f"✅ User '{username}' created successfully.")
+    except subprocess.CalledProcessError:
+        print(f"❌ Failed to create user '{username}'. Ensure you have sudo privileges.")
+        return
+
+    try:
+        subprocess.run(["id", username], check=True)
+        print(f"✅ Verification successful: '{username}' exists in the system.")
+    except subprocess.CalledProcessError:
+        print(f"❌ Verification failed: '{username}' does not exist.")
+
+username = input("Enter the username to create: ")
+create_user(username)
