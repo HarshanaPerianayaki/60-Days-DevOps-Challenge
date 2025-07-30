@@ -1,0 +1,202 @@
+Day 6
+
+Advanced Python for DevOps
+
+Learning points:
+🔹 Object-Oriented Programming (OOP) – Classes, Inheritance, and Polymorphism.
+🔹 Concurrency & Parallelism – Using threading and multiprocessing.
+🔹 Creating & Interacting with APIs – Buiding REST API FastAPI.
+🔹 Database Integration – Working with MySQL/PostgreSQL using SQLAlchemy.
+🔹 Logging & Debugging – Setting up structured logging (logging module).
+🔹 Infrastructure Automation – Using Python for provisioning servers, managing SSH connections (paramiko).
+🔹 Building Python Apps – Flask/Django for web apps
+🔹 Packaging & Distribution – Creating Python packages with setuptools.
+
+Initial Tasks:
+✅ Task 1: Set up a virtual environment (venv) and install the required packages (pip install flask django requests logging).
+
+🔹 Challenge 1: SSH to Remote Server Using Paramiko
+import paramiko
+
+def ssh_connect(hostname, username=None, password=None, key_path=None, command=None):
+    try:
+        client = paramiko.SSHClient()
+        client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        print(f"🔌 Connecting to {hostname}...")
+        if key_path:
+            client.connect(hostname, username=username, key_filename=key_path, timeout=10)
+        else:
+            client.connect(hostname, username=username, password=password, timeout=10)
+        print(f"✅ Connected to {hostname}")
+        stdin, stdout, stderr = client.exec_command(command)
+        print("📜 Command Output:")
+        print(stdout.read().decode())
+        error = stderr.read().decode()
+        if error:
+            print(f"❌ Error:\n{error}")
+        client.close()
+        print("🔌 Disconnected.")
+    except paramiko.AuthenticationException:
+        print("❌ Authentication failed. Check your credentials.")
+    except paramiko.SSHException as e:
+        print(f"❌ SSH error: {e}")
+    except Exception as e:
+        print(f"❌ An error occurred: {e}")
+
+auth_method = input("Choose authentication method (1: Username & Password, 2: SSH Key): ")
+hostname = input("Enter remote server IP or hostname: ")
+if auth_method == "1":
+    username = input("Enter SSH username: ")
+    password = input("Enter SSH password: ")
+    key_path = None
+elif auth_method == "2":
+    username = input("Enter SSH username: ")
+    key_path = input("Enter path to SSH private key: ")
+    password = None
+else:
+    print("❌ Invalid selection. Exiting.")
+    exit()
+command = input("Enter command to execute: ")
+ssh_connect(hostname, username, password, key_path, command)
+
+Save as a Python file on your system:
+
+Create a file named something like:
+ssh_remote_connect.py
+Paste the entire code into it.
+
+Then run it from your terminal or Git Bash:
+python ssh_remote_connect.py
+
+
+🔹 Challenge 2: System Health API using Flask + psutil
+from flask import Flask, jsonify
+import psutil
+
+app = Flask(__name__)
+
+@app.route('/health', methods=['GET'])
+def system_health():
+    disk_usage = psutil.disk_usage('/')
+    net_io = psutil.net_io_counters()
+    health_data = {
+        "cpu_usage": psutil.cpu_percent(interval=1),
+        "memory_usage": psutil.virtual_memory().percent,
+        "disk_usage": {
+            "total": disk_usage.total,
+            "used": disk_usage.used,
+            "free": disk_usage.free,
+            "percent": disk_usage.percent
+        },
+        "network": {
+            "bytes_sent": net_io.bytes_sent,
+            "bytes_received": net_io.bytes_recv,
+            "packets_sent": net_io.packets_sent,
+            "packets_received": net_io.packets_recv
+        }
+    }
+    return jsonify(health_data)
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000, debug=True)
+
+Save it as a Python file
+Create a file named:
+system_health_api.py
+
+Run it using Python
+Make sure Flask and psutil are installed:
+pip install flask psutil
+
+Then run:
+python system_health_api.py
+
+Access the API in browser or Postman:
+http://localhost:5000/health
+
+If running on a server:
+http://<your-server-ip>:5000/health
+
+🔹 Challenge 3: Execute System Commands with Python Subprocess
+import subprocess
+
+def run_command(command):
+    try:
+        result = subprocess.run(command, shell=True, check=True, text=True, capture_output=True)
+        print("✅ Command executed successfully!\n")
+        print("📜 Output:\n", result.stdout)
+    except subprocess.CalledProcessError as e:
+        print(f"❌ Command failed with error:\n{e.stderr}")
+
+command = input("Enter a system command to run: ")
+run_command(command)
+
+Save the code as:
+run_command.py
+
+Open terminal or CMD and run:
+python run_command.py
+Enter a command like:
+
+Windows:
+dir, echo Hello World, ping google.com
+
+Linux/Mac:
+ls, echo Hello, whoami, uptime
+
+
+🔹 Challenge 4: Weather API using Flask + OpenWeatherMap
+from flask import Flask, jsonify, request
+import requests
+
+app = Flask(__name__)
+API_KEY = "your_api_key_here"
+BASE_URL = "http://api.openweathermap.org/data/2.5/weather"
+
+@app.route('/weather', methods=['GET'])
+def get_weather():
+    city = request.args.get('city')
+    if not city:
+        return jsonify({"error": "❌ City parameter is required"}), 400
+    params = {"q": city, "appid": API_KEY, "units": "metric"}
+    try:
+        response = requests.get(BASE_URL, params=params)
+        data = response.json()
+        if response.status_code != 200:
+            return jsonify({"error": data.get("message", "Unknown error")}), response.status_code
+        weather_data = {
+            "city": data["name"],
+            "temperature": data["main"]["temp"],
+            "weather": data["weather"][0]["description"],
+            "humidity": data["main"]["humidity"],
+            "wind_speed": data["wind"]["speed"]
+        }
+        return jsonify(weather_data)
+    except requests.exceptions.RequestException as e:
+        return jsonify({"error": f"API request failed: {e}"}), 500
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000, debug=True)
+
+1. 🔑 Get an OpenWeatherMap API Key
+Sign up at https://openweathermap.org/api
+
+Go to your dashboard and copy your API Key.
+
+2. 📝 Update Your Python Code
+Replace:
+API_KEY = "your_api_key_here"
+With:
+API_KEY = "your_real_api_key"
+3. 💾 Save the File
+Save the script as: weather_api.py
+
+▶️ Run the App
+In terminal:
+python weather_api.py
+🌐 Test It in Your Browser/Postman
+Once the server is running on http://localhost:5000, open your browser and go to:
+http://localhost:5000/weather?city=Chennai
+Or test with curl:
+curl "http://localhost:5000/weather?city=Chennai"
+
