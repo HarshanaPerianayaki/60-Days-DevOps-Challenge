@@ -1,0 +1,317 @@
+Day 7
+
+Advanced Python for DevOps
+
+Learning points:
+🔹 Object-Oriented Programming (OOP) – Classes, Inheritance, and Polymorphism.
+🔹 Concurrency & Parallelism – Using threading and multiprocessing.
+🔹 Creating & Interacting with APIs – Buiding REST API FastAPI.
+🔹 Database Integration – Working with MySQL/PostgreSQL using SQLAlchemy.
+🔹 Logging & Debugging – Setting up structured logging (logging module).
+🔹 Infrastructure Automation – Using Python for provisioning servers, managing SSH connections (paramiko).
+🔹 Building Python Apps – Flask/Django for web apps
+🔹 Packaging & Distribution – Creating Python packages with setuptools.
+
+Initial Tasks:
+✅ Task 1: Set up a virtual environment (venv) and install the required packages (pip install flask django requests logging).
+
+Challenge 1: Django CRUD App
+
+🔧 Step-by-Step Setup for Django CRUD App (To-Do App)
+1️⃣ Create Django Project
+bash
+Copy
+Edit
+django-admin startproject crud_project
+cd crud_project
+python manage.py startapp todo
+2️⃣ crud_project/settings.py
+Add 'todo' to INSTALLED_APPS:
+
+python
+Copy
+Edit
+INSTALLED_APPS = [
+    ...,
+    'todo',
+]
+3️⃣ todo/models.py
+python
+Copy
+Edit
+from django.db import models
+
+class Task(models.Model):
+    title = models.CharField(max_length=200)
+    description = models.TextField(blank=True)
+    completed = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.title
+Run migrations:
+
+bash
+Copy
+Edit
+python manage.py makemigrations
+python manage.py migrate
+4️⃣ todo/forms.py
+python
+Copy
+Edit
+from django import forms
+from .models import Task
+
+class TaskForm(forms.ModelForm):
+    class Meta:
+        model = Task
+        fields = ['title', 'description', 'completed']
+5️⃣ todo/views.py
+python
+Copy
+Edit
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import Task
+from .forms import TaskForm
+
+def task_list(request):
+    tasks = Task.objects.all()
+    return render(request, 'task_list.html', {'tasks': tasks})
+
+def task_create(request):
+    form = TaskForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+        return redirect('task_list')
+    return render(request, 'task_form.html', {'form': form})
+
+def task_update(request, pk):
+    task = get_object_or_404(Task, pk=pk)
+    form = TaskForm(request.POST or None, instance=task)
+    if form.is_valid():
+        form.save()
+        return redirect('task_list')
+    return render(request, 'task_form.html', {'form': form})
+
+def task_delete(request, pk):
+    task = get_object_or_404(Task, pk=pk)
+    if request.method == "POST":
+        task.delete()
+        return redirect('task_list')
+    return render(request, 'task_confirm_delete.html', {'task': task})
+6️⃣ crud_project/urls.py
+python
+Copy
+Edit
+from django.contrib import admin
+from django.urls import path
+from todo import views
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('', views.task_list, name='task_list'),
+    path('create/', views.task_create, name='task_create'),
+    path('update/<int:pk>/', views.task_update, name='task_update'),
+    path('delete/<int:pk>/', views.task_delete, name='task_delete'),
+]
+7️⃣ Create Template Files
+In todo/templates/ folder, create these files:
+
+🔸 task_list.html
+html
+Copy
+Edit
+<h1>Task List</h1>
+<a href="{% url 'task_create' %}">Create New Task</a>
+<ul>
+  {% for task in tasks %}
+    <li>
+      {{ task.title }} - {{ task.completed }}
+      <a href="{% url 'task_update' task.pk %}">Edit</a>
+      <a href="{% url 'task_delete' task.pk %}">Delete</a>
+    </li>
+  {% endfor %}
+</ul>
+🔸 task_form.html
+html
+Copy
+Edit
+<h1>{% if form.instance.pk %}Edit Task{% else %}New Task{% endif %}</h1>
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Save</button>
+</form>
+<a href="{% url 'task_list' %}">Back</a>
+🔸 task_confirm_delete.html
+html
+Copy
+Edit
+<h1>Delete Task</h1>
+<p>Are you sure you want to delete "{{ task }}"?</p>
+<form method="post">
+  {% csrf_token %}
+  <button type="submit">Yes, Delete</button>
+</form>
+<a href="{% url 'task_list' %}">Cancel</a>
+8️⃣ Run the App
+bash
+Copy
+Edit
+python manage.py runserver
+Open browser:
+👉 http://localhost:8000
+
+✅ Features Implemented
+Create, Read, Update, Delete tasks
+
+Simple form & HTML interface
+
+Uses Django’s ORM, views, and forms
+
+
+Challenge 2: Write a Python program to parse log files and extract failed SSH login attempts
+
+✅ Step 1: Create Script parse_ssh_logs.py
+import re
+
+LOG_FILE = "/var/log/auth.log"  # Modify path if needed
+
+def parse_ssh_failures(log_file):
+    try:
+        with open(log_file, "r") as file:
+            logs = file.readlines()
+
+        failed_attempts = []
+        ssh_fail_pattern = re.compile(r"Failed password for (invalid user )?(\S+) from (\d+\.\d+\.\d+\.\d+) port \d+")
+
+        for line in logs:
+            match = ssh_fail_pattern.search(line)
+            if match:
+                user = match.group(2)
+                ip_address = match.group(3)
+                failed_attempts.append((user, ip_address))
+
+        print("\U0001F4DC Failed SSH Login Attempts:")
+        for user, ip in failed_attempts:
+            print(f"\U0001F534 User: {user} | IP: {ip}")
+
+    except FileNotFoundError:
+        print(f"\u274C Error: Log file '{log_file}' not found!")
+    except Exception as e:
+        print(f"\u274C An error occurred: {e}")
+
+# Run
+parse_ssh_failures(LOG_FILE)
+✅ Step 2: Run the Script
+sudo python3 parse_ssh_logs.py
+
+
+Challenge 3: Use Fabric or Paramiko to automate SSH login and run commands on multiple servers
+
+Using Paramiko
+Paramiko provides a low-level interface for SSH operations.
+
+Step 1: Install Paramiko
+pip install paramiko
+Step 2: Create the Python Script paramiko_ssh.py
+import paramiko
+
+# List of servers
+servers = [
+    {"host": "192.168.1.100", "user": "ubuntu", "password": None, "key": "/path/to/private/key"},
+    {"host": "192.168.1.101", "user": "ubuntu", "password": "yourpassword", "key": None},
+]
+
+def run_ssh_command(host, user, password, key, command):
+    try:
+        client = paramiko.SSHClient()
+        client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        if key:
+            client.connect(hostname=host, username=user, key_filename=key, timeout=10)
+        else:
+            client.connect(hostname=host, username=user, password=password, timeout=10)
+
+        stdin, stdout, stderr = client.exec_command(command)
+        output = stdout.read().decode().strip()
+        error = stderr.read().decode().strip()
+
+        print(f"✅ {host} Output:\n{output}\n" if output else f"❌ {host} Error:\n{error}\n")
+        client.close()
+    except Exception as e:
+        print(f"❌ Failed to connect to {host}: {e}")
+
+# Run command on all servers
+for server in servers:
+    print(f"🔌 Connecting to {server['host']}...")
+    run_ssh_command(server["host"], server["user"], server.get("password"), server.get("key"), "uptime")
+Step 3: Run the Script
+python paramiko_ssh.py
+
+
+Challenge 4: Write a Python program that checks a GitHub repository for new commits and triggers a build job
+
+✅ Step 1: Install Required Dependencies
+pip install requests
+✅ Step 2: Create the Python Script check_github_commits.py
+import requests
+import time
+import json
+
+GITHUB_REPO = "owner/repository"
+GITHUB_BRANCH = "main"
+GITHUB_API_URL = f"https://api.github.com/repos/{GITHUB_REPO}/commits/{GITHUB_BRANCH}"
+LAST_COMMIT_FILE = "last_commit.json"
+BUILD_TRIGGER_URL = "https://ci.example.com/build"
+
+def get_latest_commit():
+    try:
+        response = requests.get(GITHUB_API_URL)
+        response.raise_for_status()
+        commit_data = response.json()
+        return commit_data["sha"]
+    except requests.exceptions.RequestException as e:
+        print(f"❌ Error fetching latest commit: {e}")
+        return None
+
+def load_last_commit():
+    try:
+        with open(LAST_COMMIT_FILE, "r") as file:
+            return json.load(file).get("last_commit")
+    except FileNotFoundError:
+        return None
+
+def save_last_commit(commit_sha):
+    with open(LAST_COMMIT_FILE, "w") as file:
+        json.dump({"last_commit": commit_sha}, file)
+
+def trigger_build(commit_sha):
+    try:
+        response = requests.post(BUILD_TRIGGER_URL, json={"commit": commit_sha})
+        if response.status_code == 200:
+            print(f"✅ Build triggered successfully for commit: {commit_sha}")
+        else:
+            print(f"⚠️ Failed to trigger build. Status Code: {response.status_code}")
+    except requests.exceptions.RequestException as e:
+        print(f"❌ Error triggering build: {e}")
+
+def monitor_github():
+    print(f"🔍 Monitoring GitHub repository: {GITHUB_REPO}")
+    while True:
+        latest_commit = get_latest_commit()
+        if not latest_commit:
+            time.sleep(60)
+            continue
+
+        last_commit = load_last_commit()
+        if latest_commit != last_commit:
+            print(f"🚀 New commit detected: {latest_commit}")
+            trigger_build(latest_commit)
+            save_last_commit(latest_commit)
+        else:
+            print("✅ No new commits detected.")
+        time.sleep(60)
+
+monitor_github()
+✅ Step 3: Run the Script
+python check_github_commits.py
