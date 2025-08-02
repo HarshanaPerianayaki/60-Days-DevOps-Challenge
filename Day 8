@@ -1,0 +1,65 @@
+Day 8
+
+Learn YAML + GitHub Actions Pipeline
+
+✅ Step 1: Understand What YAML Is
+YAML (YAML Ain’t Markup Language) is used to write configuration files in a human-readable format.
+
+YAML Syntax Example:
+name: My First Workflow
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Run echo
+        run: echo "Hello DevOps!"
+
+🟡 YAML uses spaces (not tabs). Indentation matters a lot.
+
+
+✅ Step 2: Create a Sample GitHub Repo
+
+Go to https://github.com → create new repo → Name: github-actions-demo.
+
+Clone it to your local machine:
+git clone https://github.com/your-username/github-actions-demo.git
+cd github-actions-demo
+
+
+✅ Step 3: Create Your First GitHub Actions Workflow File
+Create these folders and file:
+mkdir -p .github/workflows
+touch .github/workflows/hello.yml
+
+Edit hello.yml (open with VS Code or Notepad):
+name: Hello World CI
+on: [push]
+jobs:
+  say-hello:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Print Hello
+        run: echo "🎉 Hello from GitHub Actions!"
+
+
+✅ Step 4: Commit and Push the Workflow
+git add .
+git commit -m "Add GitHub Actions workflow"
+git push origin main
+
+⏳ Now go to your repo → Actions tab → you'll see the workflow running.
+
+
+✅ Step 5: View Output
+Go to Actions → Click on the latest workflow → say-hello job → Print Hello step.
+
+You’ll see the output: 🎉 Hello from GitHub Actions!
+
