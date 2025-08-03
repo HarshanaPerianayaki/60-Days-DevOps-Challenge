@@ -1,0 +1,53 @@
+Day 10
+
+Successfully installed Docker Desktop and ran my first container using Nginx! 🐳
+
+✅ Step 1: Install Docker Desktop
+Go to the official Docker website:
+🔗 https://www.docker.com/products/docker-desktop/
+
+Click “Download for Windows”.
+
+After downloading, run the installer.
+
+During installation:
+
+Select WSL 2 as the backend (recommended)
+
+
+
+✅ Step 2: Verify Docker Installation
+After your system restarts:
+
+Open Command Prompt or PowerShell
+
+Run:
+docker --version
+
+You should see something like:
+Docker version 24.xx, build xxxx
+
+✅ Step 3: Run Your First Container – Nginx
+Now that Docker is running:
+
+Pull and run the Nginx container:
+docker run -d -p 8080:80 nginx
+
+-d → runs in detached (background) mode
+-p 8080:80 → maps port 80 of the container to your localhost:8080
+
+Open your browser and visit:
+🌐 http://localhost:8080
+
+You’ll see the Nginx welcome page.
+
+✅ Step 4: Check Running Containers
+
+docker ps
+
+It shows a list of running containers.
+If you face any issues like:
+❌ dockerDesktopLinuxEngine/_ping not found
+🔁 Restart Docker Desktop from the Start Menu
+
+Ensure WSL 2 and virtualization are enabled in your system
