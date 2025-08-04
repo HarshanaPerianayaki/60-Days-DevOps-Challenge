@@ -1,0 +1,63 @@
+Day 11
+
+Python Project – CI Pipeline
+
+
+🔹 Step 1: Create a Python app with test
+
+mkdir python-ci-demo
+cd python-ci-demo
+python -m venv venv
+source venv/bin/activate
+pip install pytest
+
+Create test file:
+# app.py
+def add(x, y):
+    return x + y
+
+# test_app.py
+from app import add
+
+def test_add():
+    assert add(2, 3) == 5
+
+
+🔹 Step 2: Create GitHub Actions Workflow
+
+Create file: .github/workflows/python-ci.yml
+
+name: Python CI
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest
+
+      - name: Run tests
+        run: pytest
+
+✅ Result:
+After pushing code to GitHub:
+
+GitHub Actions triggers the workflow.
+
+Tests run automatically.
+
+You can view test output in the Actions tab of your repo.
