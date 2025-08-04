@@ -1,0 +1,51 @@
+Day 12
+
+Here’s a step-by-step guide to create a free Azure DevOps account and a new project:
+
+✅ Step 1: Create a Free Azure DevOps Account
+🌐 Go to: https://dev.azure.com/
+
+Sign in with your Microsoft account (or create one if needed).
+
+Once signed in, you’ll be redirected to the Azure DevOps welcome page.
+
+
+✅ Step 2: Create a New Azure DevOps Organization (first time only)
+Click "Create new organization".
+
+Enter:
+
+Organization name: e.g., harshana-devops
+
+Region: choose a location close to you.
+
+Click Continue.
+
+
+✅ Step 3: Create a New Project
+Click “New Project” on the dashboard.
+
+Fill in project details:
+
+Project name: e.g., DevOps-Practice
+
+Description (optional): “Learning DevOps step by step”
+
+Visibility: choose Private (recommended) or Public
+
+Version control: Git (default)
+
+Work item process: Basic
+
+Click Create.
+
+
+✅ Your Azure DevOps project is ready! You can now:
+
+Create repositories
+
+Build CI/CD pipelines
+
+Use Boards for task tracking
+
+Integrate with GitHub or VS Code
