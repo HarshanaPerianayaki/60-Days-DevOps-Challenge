@@ -1,0 +1,43 @@
+3. Azure Boards – Track Your Work using Azure DevOps:
+
+✅ Step-by-Step: Use Azure Boards to Track Your Work
+
+🔸 Step 1: Go to Azure DevOps & Open Your Project
+Visit 👉 https://dev.azure.com
+
+Select your DevOps organization.
+
+Choose your project (the one you created earlier).
+
+🔸 Step 2: Navigate to Azure Boards
+In the left sidebar, click Boards > Work Items.
+
+🔸 Step 3: Create a Work Item (User Story or Task)
+Click "New Work Item" ➝ Select User Story or Task.
+
+Enter a title (e.g., Create CI Pipeline for Python App).
+
+Add a description (optional).
+
+Set the area path and iteration (optional).
+
+Click Save & Close.
+
+🔸 Step 4: Assign the Work Item to Yourself
+Open the work item.
+
+In the Assigned To field ➝ Select your user account.
+
+Save it.
+
+🔸 Step 5: Use the Kanban Board to Track Progress
+Go to Boards > Boards from the left menu.
+
+You’ll see columns: To Do, Doing, and Done.
+
+🔸 Step 6: Move Items Across Columns
+Drag your work item (User Story or Task) from:
+
+To Do ➝ Doing when you start.
+
+Doing ➝ Done when completed.
